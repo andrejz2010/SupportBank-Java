@@ -34,6 +34,8 @@ public class App {
         }
 
 
+
+
         HashMap<String, String> hash_map = new HashMap<String, String>();
         boolean skip = true;
         String line = "";
@@ -51,7 +53,10 @@ public class App {
 
 
                 hash_map.put(dataInTheLine[1], dataInTheLine[1]);   //Adding unique names to HashMap
-                hash_map.put(dataInTheLine[2], dataInTheLine[2]);   //Adding unique names to HashMap
+                hash_map.put(dataInTheLine[2], dataInTheLine[2]);//Adding unique names to HashMap
+
+
+
 
 
             }
@@ -72,7 +77,40 @@ public class App {
         }
 
 
-        System.out.println(listOfNames);
+
+
+
+
+
+
+        try {
+            //parsing a CSV file into BufferedReader class constructor
+            BufferedReader br = new BufferedReader(new FileReader("/home/andrej/IdeaProjects/SupportBank-Java/SupportBank-Java/Transactions2014.csv"));
+            while ((line = br.readLine()) != null) {
+                if (skip) {
+                    skip = false; // Skip only the first line
+                    continue;
+                }
+                String[] dataInTheLine = line.split(splitBy);
+              //  System.out.println("[Date=" + dataInTheLine[0] + ", From=" + dataInTheLine[1] + ", To=" + dataInTheLine[2] + ", Narrative=" + dataInTheLine[3] + ", Amount= " + dataInTheLine[4] + "]");
+
+
+                if(account.getName().equals(dataInTheLine[1])){
+                    System.out.println("Match!");
+                }
+
+
+
+
+
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 
 
