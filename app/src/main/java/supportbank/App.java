@@ -3,7 +3,7 @@
  */
 package supportbank;
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class App {
@@ -26,20 +26,23 @@ public class App {
         }
 
 
+
+
     }
+
 
 
 
 
         public static void main(String[] args) throws Exception
         {
-
+            HashMap<String, String> hash_map = new HashMap<String, String>();
             boolean skip = true;
             String line = "";
             String splitBy = ",";
             try
             {
-//parsing a CSV file into BufferedReader class constructor
+                //parsing a CSV file into BufferedReader class constructor
                 BufferedReader br = new BufferedReader(new FileReader("/home/andrej/IdeaProjects/SupportBank-Java/SupportBank-Java/Transactions2014.csv"));
                 while ((line = br.readLine()) != null)
                 {
@@ -47,14 +50,30 @@ public class App {
                         skip = false; // Skip only the first line
                         continue;
                     }
-                    String[] employee = line.split(splitBy);
-                    System.out.println("[Date=" + employee[0] + ", From=" + employee[1] + ", To=" + employee[2] + ", Narrative=" + employee[3] + ", Amount= " + employee[4] + "]");
+                    String[] dataInTheLine = line.split(splitBy);
+                    System.out.println("[Date=" + dataInTheLine[0] + ", From=" + dataInTheLine[1] + ", To=" + dataInTheLine[2] + ", Narrative=" + dataInTheLine[3] + ", Amount= " + dataInTheLine[4] + "]");
+
+
+                    hash_map.put(dataInTheLine[1], dataInTheLine[1]);   //Adding unique names to HashMap
+                    hash_map.put(dataInTheLine[2], dataInTheLine[2]);   //Adding unique names to HashMap
+
+
                 }
             }
             catch (IOException e)
             {
                 e.printStackTrace();
             }
+
+
+
+            // Getting Collection of values from HashMap
+            Collection<String> values = hash_map.values();
+
+            // Creating an ArrayList of listOfNames
+            ArrayList<String> listOfNames = new ArrayList<>(values);
+
+            System.out.println(listOfNames);
         }
 
 
