@@ -6,6 +6,8 @@ package supportbank;
 import java.io.*;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.Scanner;  // Import the Scanner class
+import java.util.regex.Matcher;
 
 
 public class App {
@@ -13,30 +15,8 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        class Account {
-            public String name;
-            public double moneyFromBank = 0;
 
-            public void addMoneyToBank(double amountToAdd) {
-                this.moneyFromBank += amountToAdd;
-            }
-
-            public void reduceMoneyInBank(double amountToAdd) {
-                this.moneyFromBank += amountToAdd;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public Account(String name) {
-                this.name = name;
-            }
-        }
-
-
-
-
+        BankingSystem bankingSystem = new BankingSystem();
         HashMap<String, String> hash_map = new HashMap<String, String>();
         boolean skip = true;
         String line = "";
@@ -50,81 +30,44 @@ public class App {
                     continue;
                 }
                 String[] dataInTheLine = line.split(splitBy);
-                System.out.println("[Date=" + dataInTheLine[0] + ", From=" + dataInTheLine[1] + ", To=" + dataInTheLine[2] + ", Narrative=" + dataInTheLine[3] + ", Amount= " + dataInTheLine[4] + "]");
+
+                String date = dataInTheLine[0].trim();
+                String from = dataInTheLine[1].trim();
+                String to = dataInTheLine[2].trim();
+                String narrative = dataInTheLine[3].trim();
+                Double amount = Double.parseDouble(dataInTheLine[4].trim());
 
 
-                hash_map.put(dataInTheLine[1], dataInTheLine[1]);   //Adding unique names to HashMap
-                hash_map.put(dataInTheLine[2], dataInTheLine[2]);//Adding unique names to HashMap
-
-
-
-
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        // Getting Collection of values from HashMap
-        Collection<String> values = hash_map.values();
-
-        // Creating an ArrayList of listOfNames
-        ArrayList<String> listOfNames = new ArrayList<>(values);
-
-
-
-
-        HashMap<String, Account> accountsByNames = new HashMap<String, Account>();
-
-
-
-
-        for (String n : listOfNames) {
-            Account account = new Account(n);
-            accountsByNames.put(n, account);
-        }
-
-
-        System.out.println(accountsByNames);
-
-
-
-        try {
-            //parsing a CSV file into BufferedReader class constructor
-            BufferedReader br = new BufferedReader(new FileReader("/home/andrej/IdeaProjects/SupportBank-Java/SupportBank-Java/Transactions2014.csv"));
-            skip=true;
-            while ((line = br.readLine()) != null) {
-                if (skip) {
-                    skip = false; // Skip only the first line
-                    continue;
-                }
-                String[] dataInTheLine = line.split(splitBy);
-                // System.out.println("[Date=" + dataInTheLine[0] + ", From=" + dataInTheLine[1] + ", To=" + dataInTheLine[2] + ", Narrative=" + dataInTheLine[3] + ", Amount= " + dataInTheLine[4] + "]");
-
-accountsByNames.get(dataInTheLine[1]).moneyFromBank+=Double.parseDouble(dataInTheLine[4]);
-accountsByNames.get(dataInTheLine[2]).moneyFromBank-=Double.parseDouble(dataInTheLine[4]);
-
-
-
-
-
+                bankingSystem.createAccount(from);
+                bankingSystem.createAccount(to);
+                bankingSystem.makeTransaction(date, from, to, narrative, amount);
 
 
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Result: ");
-        NumberFormat formatter=NumberFormat.getCurrencyInstance(Locale.UK);
-        for (String n : listOfNames) {
-            String currency=formatter.format(accountsByNames.get(n).moneyFromBank);
-            System.out.println(n+" should get "+ currency + " from the bank" );;
 
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the command: (List all or List of transactions)");
+        String userInput = sc.nextLine();
+
+
+        if ("List all".equals(userInput)) {
+            bankingSystem.listALl();
+        } else if ("List of transactions".equals(userInput)) {
+            System.out.println("Input person name: ");
+            String name = sc.nextLine();
+            bankingSystem.getAccounts().get(name).printAllTransaction();
+        } else {
+            System.out.println("command not found");
         }
 
 
     }
-
-
 }
+
+
+
+
