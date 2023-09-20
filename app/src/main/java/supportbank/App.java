@@ -9,35 +9,42 @@ import java.util.*;
 import java.util.Scanner;  // Import the Scanner class
 import java.util.regex.Matcher;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class App {
 
+    private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) throws Exception {
 
+        logger.info("Hello, World!");
 
         BankingSystem bankingSystem = new BankingSystem();
         HashMap<String, String> hash_map = new HashMap<String, String>();
         boolean skip = true;
         String line = "";
         String splitBy = ",";
+        int lineNumber = 0;
         try {
             //parsing a CSV file into BufferedReader class constructor
-            BufferedReader br = new BufferedReader(new FileReader("/home/andrej/IdeaProjects/SupportBank-Java/SupportBank-Java/Transactions2014.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("/home/andrej/IdeaProjects/SupportBank-Java/SupportBank-Java/DodgyTransactions2015.csv"));
             while ((line = br.readLine()) != null) {
+                lineNumber++;
                 if (skip) {
                     skip = false; // Skip only the first line
                     continue;
                 }
                 String[] dataInTheLine = line.split(splitBy);
-
+                logger.info("line" + lineNumber);
                 String date = dataInTheLine[0].trim();
                 String from = dataInTheLine[1].trim();
                 String to = dataInTheLine[2].trim();
                 String narrative = dataInTheLine[3].trim();
                 Double amount = Double.parseDouble(dataInTheLine[4].trim());
 
-
+                ;
                 bankingSystem.createAccount(from);
                 bankingSystem.createAccount(to);
                 bankingSystem.makeTransaction(date, from, to, narrative, amount);
